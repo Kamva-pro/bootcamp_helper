@@ -27,6 +27,16 @@ def student_list():
 
     return students
 
+def edit_teams(student_list):
+    result_list = []
+    for i in range(0, len(student_list), 4):
+        team = student_list[i:i+4]
+        for j, student in enumerate(team):
+            name, date, location, seat, = student.split(" - ")
+            team[j] = f"{name} - {date} - {location} - {seat}"
+        result_list.extend(team)
+    return result_list
+    
 
 def organise_students(full_student_list, campus, isTeam):
     new_student_list = []
@@ -111,8 +121,6 @@ def dbn_physical_students(dbn_students):
     '''
     dbn_physical_students_list = []
 
-
-
     dbn_physical_students_list = organise_students(dbn_students, "Durban Physical", False)
 
     return dbn_physical_students_list
@@ -125,10 +133,8 @@ def dbn_physical_teams(dbn_physical_students):
     one big list
     '''
     result_list = []
-    # teams_list = [dbn_physical_students[team:team+4]]
-    for i in range(0,len(dbn_physical_students), 4):
-        result_list.extend([dbn_physical_students[i:i+4]])
-        
+    
+    result_list = edit_teams(dbn_physical_students)
     return result_list
 
 
@@ -136,6 +142,9 @@ def dbn_teams_file(durban_physical_teams):
     '''
     write and save the information in the dbn_physical_teams into a textfile
     '''
+    with open('dbn_physical_teams.txt', 'w') as f:
+        for team in durban_physical_teams:
+            f.write(team + '\n')
 
 
 
@@ -152,16 +161,13 @@ def cpt_physical_students(cpt_physical_students):
 
 
 
-def cpt_physical_teams(cpt_physical_teams):
+def cpt_physical_teams(cpt_physical_teams_list):
     '''
     from the list of cpt_physical_students create list of 4 students per team, and add them to 
     one big list
     '''
     result_list = []
-    team = 0
-    teams_list = [cpt_physical_teams[team:team+4]]
-    for team in teams_list:
-        result_list.append(team)
+    result_list = edit_teams(cpt_physical_teams_list)
         
     return result_list
 
@@ -172,6 +178,10 @@ def cpt_teams_file(capetown_final_teams):
     '''
     write and save the information in the cpt_physical_teams into a textfile
     '''
+    with open('capetown_final_teams.txt', 'w') as f:
+        for team in capetown_final_teams:
+            f.write(team + '\n')
+
 
 def jhb_physical_students(jhb_physical_students):
     '''
@@ -186,16 +196,13 @@ def jhb_physical_students(jhb_physical_students):
 
 
 
-def jhb_physical_teams(jhb_physical_teams):
+def jhb_physical_teams(jhb_physical_team_list):
     '''
     from the list of jhb_physical_students create list of 4 students per team, and add them to 
     one big list
     '''
     result_list = []
-    team = 0
-    teams_list = [jhb_physical_teams[team:team+4]]
-    for team in teams_list:
-        result_list.append(team)
+    result_list = edit_teams(jhb_physical_team_list)
         
     return result_list
 
@@ -203,6 +210,11 @@ def jhb_teams_file(jhb_final_teams):
     '''
     write and save the information in the jhb_physical_teams into a textfile
     '''
+    with open('jhb_final_teams.txt', 'w') as f:
+        for team in jhb_final_teams:
+            f.write(team + '\n')
+
+    
 
 
 def nw_physical_students(nw_physical_students):
@@ -223,10 +235,7 @@ def nw_physical_teams(nw_physical_teams_list):
     one big list
     '''
     result_list = []
-    team = 0
-    teams_list = [nw_physical_teams_list[team:team+4]]
-    for team in teams_list:
-        result_list.append(team)
+    result_list = edit_teams(nw_physical_teams_list)
         
     return result_list
 
@@ -235,6 +244,10 @@ def nw_teams_file(nw_final_teams):
     '''
     write and save the information in the nw_physical_teams into a textfile
     '''
+    with open('nw_final_teams.txt', 'w') as f:
+        for team in nw_final_teams:
+            f.write(team + '\n')
+
 
 def get_virtual_students(student_list):
     '''
@@ -247,7 +260,6 @@ def get_virtual_students(student_list):
 
     return virtual_campus
 
-get_virtual_students(student_list())
 
 def virtual_teams(virtual_students_list):
     '''
@@ -256,18 +268,17 @@ def virtual_teams(virtual_students_list):
     '''
 
     virtual_teams = []
-
-    for i in range(0,len(virtual_students_list), 4):
-        virtual_teams.extend([virtual_students_list[i:i+4]])
+    
+    for i in range(0, len(virtual_students_list),4):
+        virtual_teams.extend(virtual_students_list[i:i+4])
     
     odd_teams = []
     for j in virtual_teams:
         if len(j) != 4:
-            odd_teams.extend(j)
-        return odd_teams
+            odd_teams.append(j)
+            
 
-
-    return virtual_teams
+    return odd_teams
 
 virtual_teams(get_virtual_students(student_list()))
     
@@ -278,6 +289,9 @@ def virtual_teams_file(virtual_teams):
     '''
     write and save the information in the virtual_teams into a textfile
     '''
+    with open('virtual_teams.txt', 'w') as f:
+        for team in virtual_teams:
+            f.write(team + '\n')
 
 
 if __name__ == '__main__':
@@ -296,6 +310,8 @@ if __name__ == '__main__':
     jhb_physical_teams(jhb_physical_students(student_list()))
     nw_physical_teams(nw_physical_students(student_list()))
     get_virtual_students(student_list())
+    
 
     pass
+
 
